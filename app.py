@@ -6,8 +6,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from components import (
     create_grade_histogram, create_study_hours_boxplot,
-    create_attendance_violin, create_internet_extra_chart,
-    create_parent_education_chart, create_travel_time_chart
+    create_attendance_violin, create_internet_extra_heatmap,
+    create_extra_activities_chart, create_parent_education_chart
 )
 from data_loader import load_data, get_kpi_data
 
@@ -15,34 +15,13 @@ df = load_data()
 
 kpi_data = get_kpi_data(df)
 
-parent_means = df.groupby('parent_education')['final_grade_numeric'].mean().sort_values(ascending=False).reset_index()
-fig_parent = px.bar(
-    parent_means, x='parent_education', y='final_grade_numeric',
-    title='Средняя оценка по уровню образования родителей',
-    labels={'parent_education': 'Образование родителей', 'final_grade_numeric': 'Средняя оценка'},
-    color='final_grade_numeric',
-    color_continuous_scale='Blues',
-    text_auto='.2f'
-)
+fig_parent = create_parent_education_chart(df)
 
-pivot_df = df.pivot_table(
-    values='overall_score', 
-    index='internet_access', 
-    columns='extra_activities', 
-    aggfunc='mean'
-).fillna(0)
-pivot_melted = pivot_df.reset_index().melt(
-    id_vars='internet_access', 
-    var_name='extra_activities', 
-    value_name='overall_score'
-)
-fig_internet_extra = px.bar(
-    pivot_melted, x='internet_access', y='overall_score', color='extra_activities',
-    barmode='group',
-    title='Влияние интернета и доп. занятий на успеваемость',
-    labels={'internet_access': 'Доступ к интернету', 'overall_score': 'Средний балл', 'extra_activities': 'Доп. занятия'},
-    color_discrete_sequence=px.colors.qualitative.Set2
-)
+# Тепловая карта: интернет и доп. занятия
+fig_internet_extra_heatmap = create_internet_extra_heatmap(df)
+
+# Группированная столбчатая диаграмма: распределение оценок по доп. занятиям
+fig_extra_activities = create_extra_activities_chart(df)
 
 df_display = df.head(100).copy()
 df_display = df_display.drop(columns=['student_id', 'travel_numeric'], errors='ignore')
@@ -160,11 +139,11 @@ dash_dashboard_app.layout = html.Div(style={
         dcc.Tab(label="Образование родителей", children=[
             dcc.Graph(figure=fig_parent, style={'marginBottom': '0px', 'marginTop': '0px'}),  
         ]),
-        dcc.Tab(label="Время в пути", children=[
-            dcc.Graph(figure=create_travel_time_chart(df), style={'marginBottom': '0px', 'marginTop': '0px'}),  
-        ]),
         dcc.Tab(label="Интернет и доп. занятия", children=[
-            dcc.Graph(figure=fig_internet_extra, style={'marginBottom': '0px', 'marginTop': '0px'}),  
+            dcc.Graph(figure=fig_internet_extra_heatmap, style={'marginBottom': '0px', 'marginTop': '0px'}),  
+        ]),
+        dcc.Tab(label="Дополнительные занятия vs Оценки", children=[
+            dcc.Graph(figure=fig_extra_activities, style={'marginBottom': '0px', 'marginTop': '0px'}),  
         ]),
     ], style={'marginTop': '10px', 'fontFamily': 'Sans-serif'}),
 ])
