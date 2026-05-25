@@ -15,7 +15,6 @@ instance/
 .env
 
 # Data files
-*.csv
 *.xlsx
 *.xls
 !requirements.txt
