@@ -1,24 +1,38 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
 venv/
 env/
+ENV/
+.venv/
+
+# Flask/Dash
+instance/
+.webassets-cache
+.env
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+!requirements.txt
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store
+Thumbs.db
 
-# Dash logs
+# Logs
+*.log
 jupyter-dash-app.log
 
-# Local config (но данные оставляем)
-.env
+# Local config
 config_local.py
-
-# Игнорируем только определенные большие файлы данных
-data/raw/*.csv
-# но коммитим маленький sample
-!data/sample.csv

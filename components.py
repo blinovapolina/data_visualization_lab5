@@ -1,24 +1,17 @@
-# components.py
-from dash import html
 import plotly.express as px
 import plotly.graph_objects as go
-from config import COLORS, GRADE_ORDER, TRAVEL_ORDER, GRADE_COLORS
 
-def create_kpi_card(title, value, color, icon=""):
-    """Создание карточки с KPI"""
-    return html.Div([
-        html.Div([
-            html.H3(f"{icon} {title}".strip(), style={'margin': 0, 'color': '#555', 'fontSize': '14px'}),
-            html.H2(value, style={'margin': '10px 0', 'color': color, 'fontWeight': 'bold'})
-        ], style={
-            'textAlign': 'center', 
-            'padding': '15px', 
-            'backgroundColor': COLORS['background'], 
-            'borderRadius': '10px', 
-            'boxShadow': '2px 2px 5px rgba(0,0,0,0.1)',
-            'borderLeft': f'4px solid {color}'
-        })
-    ], className="three columns")
+GRADE_ORDER = ['a', 'b', 'c', 'd', 'e', 'f']
+TRAVEL_ORDER = ['<15 min', '15-30 min', '30-60 min', '>60 min']
+
+GRADE_COLORS = {
+    'a': '#27ae60',
+    'b': '#2ecc71',
+    'c': '#f1c40f',
+    'd': '#e67e22',
+    'e': '#e74c3c',
+    'f': '#c0392b'
+}
 
 def create_grade_histogram(dff):
     """Гистограмма распределения оценок"""
@@ -69,7 +62,7 @@ def create_attendance_violin(dff):
     return fig
 
 def create_internet_extra_chart(dff):
-    """Влияние интернета и доп. занятий"""
+    """Влияние интернета и доп. занятий на успеваемость"""
     pivot_df = dff.pivot_table(
         values='overall_score', 
         index='internet_access', 

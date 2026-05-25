@@ -1,9 +1,14 @@
 import pandas as pd
-from config import DATA_PATH
+import os
 
 def load_data():
     """Загрузка и подготовка данных"""
-    df = pd.read_csv(DATA_PATH)
+    file_path = 'Student_Performance (1).csv'
+    
+    if not os.path.exists(file_path):
+        file_path = 'data/Student_Performance (1).csv'
+    
+    df = pd.read_csv(file_path)
     
     df['final_grade'] = df['final_grade'].str.lower()
     grade_mapping = {'a': 5, 'b': 4, 'c': 3, 'd': 2, 'e': 1, 'f': 0}
@@ -15,6 +20,7 @@ def load_data():
     return df
 
 def filter_data(df, school, internet, extra):
+    """Применение фильтров к данным"""
     dff = df.copy()
     if school and school != 'all':
         dff = dff[dff['school_type'] == school]
@@ -25,6 +31,7 @@ def filter_data(df, school, internet, extra):
     return dff
 
 def get_kpi_data(dff):
+    """Расчет KPI показателей"""
     return {
         'avg_grade': dff['final_grade_numeric'].mean(),
         'avg_attendance': dff['attendance_percentage'].mean(),
