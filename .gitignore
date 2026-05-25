@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Dash logs
+jupyter-dash-app.log
+
+# Local config (но данные оставляем)
+.env
+config_local.py
+
+# Игнорируем только определенные большие файлы данных
+data/raw/*.csv
+# но коммитим маленький sample
+!data/sample.csv
