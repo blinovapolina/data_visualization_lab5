@@ -17,10 +17,8 @@ kpi_data = get_kpi_data(df)
 
 fig_parent = create_parent_education_chart(df)
 
-# Тепловая карта: интернет и доп. занятия
 fig_internet_extra_heatmap = create_internet_extra_heatmap(df)
 
-# Группированная столбчатая диаграмма: распределение оценок по доп. занятиям
 fig_extra_activities = create_extra_activities_chart(df)
 
 df_display = df.head(100).copy()

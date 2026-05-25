@@ -87,7 +87,6 @@ def create_internet_extra_heatmap(dff):
 
 def create_extra_activities_chart(dff):
     """Группированная столбчатая диаграмма: распределение оценок по доп. занятиям"""
-    # Расчет процента студентов с каждой оценкой в группах с доп. занятиями и без
     grade_dist = dff.groupby(['extra_activities', 'final_grade']).size().reset_index(name='count')
     total_by_group = grade_dist.groupby('extra_activities')['count'].sum().reset_index(name='total')
     grade_dist = grade_dist.merge(total_by_group, on='extra_activities')
